@@ -1,7 +1,7 @@
 import json
 from fastapi import WebSocket
-from websocket.manager import WebSocketManager
-from utils.match import is_solution_match
+from server.websocket.manager import WebSocketManager
+from server.utils.match import is_solution_match
 
 
 async def handle_websocket_message(websocket: WebSocket, manager: WebSocketManager, room_id: str, raw: str):

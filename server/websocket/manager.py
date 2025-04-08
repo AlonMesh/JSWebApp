@@ -1,7 +1,6 @@
 from fastapi import WebSocket
 from typing import List, Dict
 from asyncio import create_task
-from database.db_memory import code_blocks
 
 class WebSocketManager:
     """
@@ -14,7 +13,18 @@ class WebSocketManager:
         self.active_rooms: Dict[str, Dict] = {}
         
         # Preloaded code blocks with their solutions
-        self.code_blocks = {cb["id"]: cb for cb in code_blocks}
+        self.code_blocks = {}
+        
+    def load_code_blocks(self, code_blocks_list):
+        self.code_blocks = {
+            str(cb.id): {
+                "id": cb.id,
+                "title": cb.title,
+                "initial_code": cb.initial_code,
+                "solution_code": cb.solution_code
+            } for cb in code_blocks_list
+        }
+
 
     async def connect(self, websocket: WebSocket, room_id: str) -> str:
         """

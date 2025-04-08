@@ -1,8 +1,11 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from api.routes import router
-from websocket.manager import WebSocketManager
-from websocket.handlers import handle_websocket_message
+from server.api.routes import router
+from server.websocket.manager import WebSocketManager
+from server.websocket.handlers import handle_websocket_message
+from server.database.crud import get_all_code_blocks, seed_code_blocks
+from server.database.db_config import engine, Base
+from server.socket_manager import manager
 
 app = FastAPI()
 app.include_router(router)
@@ -15,7 +18,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-manager = WebSocketManager()
+@app.on_event("startup")
+async def load_code_blocks_from_db():
+    # Step 1: Create tables if they don't exist
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+        
+    # # Step 2: Seed the database with initial code blocks
+    # await seed_code_blocks()
+    
+    # Step 3: Load code blocks from the database into the WebSocket manager
+    from server.database.crud import get_all_code_blocks
+    code_blocks = await get_all_code_blocks()
+    manager.load_code_blocks(code_blocks)
 
 @app.websocket("/ws/{room_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
@@ -24,7 +39,12 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     Assigns roles, sends initial data, and routes incoming messages.
     """
     # Accept the connection and assign a role
-    role = await manager.connect(websocket, room_id)
+    try:
+        role = await manager.connect(websocket, room_id)
+    except KeyError:
+        await websocket.close(code=4001) # Room not found
+        return
+    
     await websocket.send_json({"type": "role", "role": role})
 
     # Send initial code

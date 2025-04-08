@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchCodeBlocks } from '../api/api';
 import { useNavigate } from 'react-router-dom';
+import AddCodeBlockForm from '../components/AddCodeBlockForm';
 
 const Lobby = () => {
   const [blocks, setBlocks] = useState([]);
@@ -22,6 +23,7 @@ const Lobby = () => {
           </li>
         ))}
       </ul>
+      <AddCodeBlockForm onAdd={(newBlock) => setBlocks((prev) => [...prev, newBlock])} /> {/* Add new block to the list */}
     </div>
   );
 };
