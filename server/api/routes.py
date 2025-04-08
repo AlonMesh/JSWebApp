@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from database import code_blocks
+from database.db_memory import code_blocks
 
 router = APIRouter()
 
