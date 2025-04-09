@@ -20,6 +20,8 @@ export const useCodeBlock = () => {
   const [code, setCode] = useState(''); // Code shown in the editor
   const [studentsCount, setStudentsCount] = useState(0); // Number of students
   const [isSolved, setIsSolved] = useState(false); // True if code matches the solution
+  const [initialCode, setInitialCode] = useState('');
+
 
   // WebSocket connection reference
   const socketRef = useRef(null);
@@ -42,6 +44,9 @@ export const useCodeBlock = () => {
         break;
       case MESSAGE_TYPES.CODE_UPDATE:
         setCode(data.code);
+        if (!initialCode) {
+          setInitialCode(data.code);
+        }
         break;
       case MESSAGE_TYPES.SOLVED:
         setIsSolved(true);
@@ -49,7 +54,7 @@ export const useCodeBlock = () => {
       default:
         break;
     }
-  }, [navigate]);
+  }, [navigate, initialCode]);
 
   /**
    * Establish WebSocket connection on component mount,
@@ -82,6 +87,19 @@ export const useCodeBlock = () => {
       );
     }
   };
+  
+  /**
+   * Redirects the user back to the lobby.
+   */
+  const backToLobby = () => {
+    navigate('/');
+  };
+
+  const resetToInitialCode = () => {
+    if (userRole === ROLES.STUDENT && initialCode) {
+      handleCodeChange(initialCode);
+    }
+  };
 
   return {
     roomId,
@@ -90,5 +108,7 @@ export const useCodeBlock = () => {
     isSolved,
     studentsCount,
     handleCodeChange,
+    backToLobby,
+    resetToInitialCode, 
   };
 };

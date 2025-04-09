@@ -1,0 +1,99 @@
+.code-block-wrapper {
+    padding: 1.5rem;
+    background-color: #f3f4f6;
+    min-height: 100vh;
+  }
+  
+  .top-bar {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+  }
+  
+  .back-button {
+    color: #2563eb;
+    background: transparent;
+    padding: 1rem 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 1.2rem;
+  }
+  
+  .back-button:hover {
+    background: transparent;
+    color: #1d4ed8;
+  }
+  
+  .main-content {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .room-info-panel {
+    flex: 1;
+    background-color: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    height: 100%;
+  }
+  
+  .editor-section {
+    flex: 3;
+  }
+  
+  .reset-button {
+    margin-top: 1rem;
+    background-color: #10b981; /* Emerald green */
+    color: white;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .reset-button:hover {
+    background-color: #059669; /* Darker on hover */
+  }
+  
+  .room-info-panel h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    color: #111827;
+  }
+  
+  .room-info-panel p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    color: #374151;
+  }
+  
+  .room-info-panel .room-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .share-button {
+    margin-top: 1rem;
+    background-color: #6366f1; /* Indigo */
+    color: white;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .share-button:hover {
+    background-color: #4f46e5;
+  }
+  

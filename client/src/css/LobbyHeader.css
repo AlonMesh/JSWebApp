@@ -1,0 +1,17 @@
+.lobby-header {
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: white;
+  padding: 3rem 1rem;
+  text-align: center;
+  border-bottom: 4px solid #ffc107;
+}
+
+.lobby-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.lobby-header p {
+  font-size: 1.25rem;
+  opacity: 0.85;
+}

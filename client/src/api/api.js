@@ -14,3 +14,11 @@ export const fetchCodeBlocks = async () => {
   const res = await axios.get(`${API_BASE}/code-blocks`);
   return res.data;
 };
+
+/**
+ * Fetches a specific code block by its ID from the API.
+*/
+export const fetchCodeBlock = async (id) => {
+  const res = await axios.get(`${API_BASE}/code-blocks/${id}`);
+  return res.data;
+};

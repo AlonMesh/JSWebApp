@@ -10,6 +10,7 @@ function App() {
         <Route path="/" element={<Lobby />} />
         {/* /code/:id route to be added later */}
         <Route path="/code/:id" element={<CodeBlock />} />
+        <Route path="*" element={<div>404 - Not Found</div>} />
       </Routes>
     </Router>
   );

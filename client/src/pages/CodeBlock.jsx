@@ -1,7 +1,10 @@
-import React from 'react';
-import Editor from '@monaco-editor/react';
+import React, {useState} from 'react';
 import { useCodeBlock } from '../hooks/useCodeBlock';
-import { ROLES } from '../constants';
+import RoomInfoPanel from '../components/RoomInfoPanel';
+import EditorSection from '../components/EditorSection';
+import SmileyModal from '../components/SmileyModal';
+import LobbyHeader from '../components/LobbyHeader';
+import '../css/CodeBlock.css';
 
 /**
  * CodeBlock component renders a collaborative code editor room.
@@ -16,37 +19,43 @@ const CodeBlock = () => {
     isSolved,
     studentsCount,
     handleCodeChange,
+    backToLobby,
+    resetToInitialCode,
   } = useCodeBlock();
+
+  const [showModal, setShowModal] = useState(true);
 
   return (
     <div>
-      <h2>Code Block</h2>
-      <p>Room ID: {roomId}</p>
-      <p>Role: {userRole}</p>
-      <p>Students in the room: {studentsCount}</p>
+      <LobbyHeader />
+      <div className="code-block-wrapper">
+      <div className="top-bar">
+        <button className="back-button" onClick={backToLobby}>Back to Lobby</button>
+      </div>
 
-      <Editor
-        height="60vh"
-        defaultLanguage="javascript"
-        value={code}
-        onChange={handleCodeChange}
-        options={{
-          readOnly: userRole === ROLES.MENTOR,
-          fontSize: 16,
-        }}
-      />
-
-      {isSolved && (
-        <div
-          style={{
-            fontSize: '5rem',
-            textAlign: 'center',
-            marginTop: '-20px',
-          }}
-        >
-          😄
+      <div className="main-content">
+        <div className="room-info-panel">
+          <RoomInfoPanel 
+          roomId={roomId} 
+          userRole={userRole} 
+          studentsCount={studentsCount} 
+          />
         </div>
+
+        <div className="editor-section">
+          <EditorSection
+            code={code}
+            resetToInitialCode={resetToInitialCode}
+            handleCodeChange={handleCodeChange}
+            userRole={userRole}
+          />
+        </div>
+      </div>
+
+      {isSolved && showModal && (
+        <SmileyModal onClose={() => setShowModal(false)} />
       )}
+    </div>
     </div>
   );
 };

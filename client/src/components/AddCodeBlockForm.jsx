@@ -20,7 +20,7 @@ const AddCodeBlockForm = ({ onAdd }) => {
 
     if (response.ok) {
       const newBlock = await response.json();
-      onAdd(newBlock); // מוסיף לרשימה במסך הראשי
+      onAdd(newBlock);
       setTitle('');
       setInitialCode('');
       setSolutionCode('');

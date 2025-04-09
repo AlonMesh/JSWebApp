@@ -50,7 +50,7 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     # Send initial code
     await websocket.send_json({
         "type": "code_update",
-        "code": manager.active_rooms[room_id]["code"]
+        "code": manager.active_rooms[room_id]["code"],
     })
     
     try:

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from server.database.crud import get_all_code_blocks, create_code_block
+from server.database.crud import get_all_code_blocks, create_code_block, get_code_block_by_id
 from pydantic import BaseModel
 from server.socket_manager import manager
 
@@ -33,3 +33,10 @@ async def add_code_block(block_data: CodeBlockCreate):
     # Return the newly created block
     return new_block
     
+@router.get("/code-blocks/{block_id}")
+async def get_code_block(block_id: str):
+    """Fetch a specific code block by its ID"""
+    block = await get_code_block_by_id(block_id)
+    if not block:
+        return {"error": "Code block not found"}
+    return block
