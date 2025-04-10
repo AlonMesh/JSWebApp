@@ -1,9 +1,11 @@
 import axios from 'axios';
+import { API_BASE } from './config';
 
-const API_BASE = import.meta.env.VITE_API_URL || ''; 
+// const API_BASE = "http://localhost:8000"
 
 // Fetches code blocks from the API.
 export const fetchCodeBlocks = async () => {
+  console.log("Fetching code blocks from API...", API_BASE);
   const res = await axios.get(`${API_BASE}/code-blocks`);
   return res.data;
 };

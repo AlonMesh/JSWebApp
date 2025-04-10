@@ -1,5 +1,4 @@
-const WS_BASE =
-  import.meta.env.VITE_WS_URL || `${window.location.origin.replace(/^http/, 'ws')}`;
+import { WS_BASE } from './api/config';
 
 export const connectToRoom = (roomID, onMessage) => {
     const socket = new WebSocket(`${WS_BASE}/ws/${roomID}`);
