@@ -17,7 +17,6 @@ cd JSWebApp
 #### 2. Install backend dependencies
 
 ```python
-cd server
 pip install -r requirements.txt
 ```
 
@@ -25,7 +24,7 @@ pip install -r requirements.txt
 ```python
 uvicorn server.main:app --reload
 ```
-#### 4. In a diffrent terminal, install frontend dependencies
+#### 4. In a diffrent terminal, install frontend depeדndencies
 
 ```bash
 `cd ../client
