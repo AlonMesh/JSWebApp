@@ -6,7 +6,7 @@ A real-time collaborative coding platform for JavaScript students and mentors. B
 
 ### Live Demo
 
-> Coming Soon...
+[Click Here!](https://jswebapp-production.up.railway.app/)
 
 ### How to Run Locally
 #### 1. Clone the repo
