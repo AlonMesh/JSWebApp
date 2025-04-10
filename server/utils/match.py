@@ -1,12 +1,22 @@
 def normalize_code(code: str) -> str:
     """
     Cleans code by:
+    - Removing comments starting with //
     - Stripping whitespace from each line
     - Removing empty lines
-    - Removing trailing spaces
     """
     lines = code.splitlines()
-    cleaned_lines = [line.strip() for line in lines if line.strip() != ""]
+    cleaned_lines = []
+
+    for line in lines:
+        # Remove comments starting with //
+        if '//' in line:
+            line = line.split('//', 1)[0]
+
+        line = line.strip()
+        if line:
+            cleaned_lines.append(line)
+
     return "\n".join(cleaned_lines)
 
 def is_solution_match(code: str, solution: str) -> bool:

@@ -1,7 +1,20 @@
+# FastAPI framework and related dependencies
 fastapi
-uvicorn
+uvicorn[standard]
 python-multipart
 websockets
+
+# Database dependencies
 sqlalchemy 
 aiosqlite
+
+# Testing dependencies
 pytest
+pytest-asyncio
+httpx
+
+# Utility dependencies
+python-dotenv
+
+# Frontend API integration
+pydantic

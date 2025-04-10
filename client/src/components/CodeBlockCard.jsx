@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import CodeSnippetPreview from './CodeSnippetPreview';
 import { fetchCodeBlock } from '../api/api';
@@ -8,13 +8,14 @@ import { fetchCodeBlock } from '../api/api';
  * Contains title, a preview of the code, and a button to join the code block.
  */
 const CodeBlockCard = ({ id, title }) => {
-    const [block, setBlock] = React.useState({});
+    const [block, setBlock] = useState({});
     const navigate = useNavigate();
 
+    // Fetch the code block data
     useEffect(() => {
-        fetchCodeBlock(id).then((data) => {
-            setBlock(data);
-        });
+      fetchCodeBlock(id).then((data) => {
+        setBlock(data);
+      });
     }, [id]);
     
     return (

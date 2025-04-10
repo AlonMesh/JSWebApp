@@ -20,7 +20,7 @@ const CodeBlock = () => {
     studentsCount,
     handleCodeChange,
     backToLobby,
-    resetToInitialCode,
+    sendCodeResetRequest,
   } = useCodeBlock();
 
   const [showModal, setShowModal] = useState(true);
@@ -45,7 +45,7 @@ const CodeBlock = () => {
         <div className="editor-section">
           <EditorSection
             code={code}
-            resetToInitialCode={resetToInitialCode}
+            onResetRequest={sendCodeResetRequest}
             handleCodeChange={handleCodeChange}
             userRole={userRole}
           />

@@ -12,24 +12,21 @@ export const useCodeBlock = () => {
   // Extract room ID from URL
   const { id: roomId } = useParams();
 
-  // Used for navigation (e.g., redirecting when mentor disconnects)
+  // Used for navigation
   const navigate = useNavigate();
 
   // State hooks
-  const [userRole, setUserRole] = useState(null); // 'mentor' or 'student'
-  const [code, setCode] = useState(''); // Code shown in the editor
-  const [studentsCount, setStudentsCount] = useState(0); // Number of students
-  const [isSolved, setIsSolved] = useState(false); // True if code matches the solution
+  const [userRole, setUserRole] = useState(null); 
+  const [code, setCode] = useState(''); 
+  const [studentsCount, setStudentsCount] = useState(0); 
+  const [isSolved, setIsSolved] = useState(false); 
   const [initialCode, setInitialCode] = useState('');
 
 
   // WebSocket connection reference
   const socketRef = useRef(null);
 
-  /**
-   * Handles incoming WebSocket messages.
-   * Delegates logic by message type.
-   */
+  // Handles incoming WebSocket messages and updates state accordingly
   const handleSocketMessage = useCallback((data) => {
     switch (data.type) {
       case MESSAGE_TYPES.ROLE:
@@ -48,6 +45,9 @@ export const useCodeBlock = () => {
           setInitialCode(data.code);
         }
         break;
+      case MESSAGE_TYPES.CODE_RESET:
+        setCode(data.code);
+        break;
       case MESSAGE_TYPES.SOLVED:
         setIsSolved(true);
         break;
@@ -56,11 +56,10 @@ export const useCodeBlock = () => {
     }
   }, [navigate, initialCode]);
 
-  /**
-   * Establish WebSocket connection on component mount,
-   * and clean it up when the component unmounts.
-   */
+  // Establishes WebSocket connection when the component mounts 
   useEffect(() => {
+    if (socketRef.current) return; // Prevents multiple connections
+
     socketRef.current = connectToRoom(roomId, handleSocketMessage);
 
     return () => {
@@ -75,10 +74,7 @@ export const useCodeBlock = () => {
     };
   }, [roomId, handleSocketMessage]);
 
-  /**
-   * Triggered when the code editor content changes.
-   * Sends the new code to the server if the user is a student.
-   */
+  // Handles code changes made by the user
   const handleCodeChange = (newValue) => {
     setCode(newValue);
     if (userRole === ROLES.STUDENT) {
@@ -88,19 +84,18 @@ export const useCodeBlock = () => {
     }
   };
   
-  /**
-   * Redirects the user back to the lobby.
-   */
+  // Redirects the user back to the lobby
   const backToLobby = () => {
     navigate('/');
   };
 
-  const resetToInitialCode = () => {
-    if (userRole === ROLES.STUDENT && initialCode) {
-      handleCodeChange(initialCode);
+  // Requests a code reset from the server
+  const sendCodeResetRequest = () => {
+    if (userRole === ROLES.STUDENT && socketRef.current?.readyState === WebSocket.OPEN) {
+      socketRef.current.send(JSON.stringify({ type: MESSAGE_TYPES.CODE_RESET }));
     }
   };
-
+  
   return {
     roomId,
     userRole,
@@ -109,6 +104,6 @@ export const useCodeBlock = () => {
     studentsCount,
     handleCodeChange,
     backToLobby,
-    resetToInitialCode, 
+    sendCodeResetRequest, 
   };
 };

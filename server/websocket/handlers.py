@@ -18,7 +18,8 @@ async def handle_websocket_message(websocket: WebSocket, manager: WebSocketManag
 
     if msg_type == "code_update":
         await handle_code_update(websocket, manager, room_id, data)
-    # TODO elif msg_type == "...": # Reset? chat? hint? etc.
+    elif msg_type == "code_reset":
+        await handle_code_reset(websocket, manager, room_id)
 
 
 async def handle_code_update(websocket: WebSocket, manager: WebSocketManager, room_id: str, data: dict):
@@ -43,3 +44,19 @@ async def handle_code_update(websocket: WebSocket, manager: WebSocketManager, ro
     if is_solution_match(code, solution):
         for conn in manager.get_room_connections(room_id):
             await conn.send_json({"type": "solved"})
+
+async def handle_code_reset(websocket: WebSocket, manager: WebSocketManager, room_id: str):
+    """
+    Handles a request to reset the code to the initial template.
+    Sends the original code back to all students in the room.
+    """
+    # Get the original code from the manager
+    original_code = manager.code_blocks.get(room_id, {}).get("initial_code")
+    if original_code:
+        manager.update_room_code(room_id, original_code)
+        # Send it to all connections in the room
+        for conn in manager.get_room_connections(room_id):
+            await conn.send_json({
+                "type": "code_update",
+                "code": original_code
+            })

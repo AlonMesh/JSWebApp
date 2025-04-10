@@ -6,6 +6,11 @@ import FeaturedTopicsSection from '../components/FeaturedTopicsSection';
 import SecondaryTopicsSection from '../components/SecondaryTopicsSection';
 import '../css/Lobby.css';
 
+/**
+ * Lobby component renders the main lobby page of the application.
+ * It fetches code blocks from the API and displays them in sections.
+ * Users can also add new code blocks through a form.
+ */
 const Lobby = () => {
   const [blocks, setBlocks] = useState([]);
 

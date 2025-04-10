@@ -43,35 +43,41 @@ async def create_code_block(block_data: CodeBlock):
         raise
     
     
-# Create initial code blocks ~ I was allowed to add 4 blocks manually
+# Create initial code blocks (I was allowed to add 4 blocks manually)
 async def seed_code_blocks():
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
-
-    initial_blocks = [
-        CodeBlock(
-            title="Async Example",
-            initial_code="async function fetchData() {\n  // TODO\n}",
-            solution_code="async function fetchData() {\n  const res = await fetch('url');\n  return await res.json();\n}"
-        ),
-        CodeBlock(
-            title="Promise Chain",
-            initial_code="fetch('url')\n  // TODO",
-            solution_code="fetch('url')\n  .then(res => res.json())\n  .then(data => console.log(data));"
-        ),
-        CodeBlock(
-            title="Basic Loop",
-            initial_code="for (let i = 0; i < 10; i++) {\n  // TODO\n}",
-            solution_code="for (let i = 0; i < 10; i++) {\n  console.log(i);\n}"
-        ),
-        CodeBlock(
-            title="Arrow Function",
-            initial_code="const sum = (a, b) => {\n  // TODO\n}",
-            solution_code="const sum = (a, b) => {\n  return a + b;\n}"
-        ),
-    ]
-
+        
     async with AsyncSessionLocal() as session:
+        # Check if any blocks already exist. If so, skip seeding to avoid duplicates.
+        existing_blocks = await session.execute(select(CodeBlock))
+        if existing_blocks.scalars().all():
+            return
+
+
+        initial_blocks = [
+            CodeBlock(
+                title="Arrow Function",
+                initial_code="const sum = (a, b) => {\n  // TODO\n}",
+                solution_code="const sum = (a, b) => {\n  return a + b;\n}"
+            ),
+            CodeBlock(
+                title="Async Example",
+                initial_code="async function fetchData() {\n  // TODO\n}",
+                solution_code="async function fetchData() {\n  const res = await fetch('url');\n  return await res.json();\n}"
+            ),
+            CodeBlock(
+                title="Promise.all with Multiple Requests",
+                initial_code="const urls = ['url1', 'url2'];\n// TODO: let allData = ...\n// TODO: console.log(allData);",
+                solution_code="const urls = ['url1', 'url2'];\nlet allData = await Promise.all(urls.map(url => fetch(url)));\nconsole.log(allData);"
+            ),
+            CodeBlock(
+                title="Custom Promise Wrapper",
+                initial_code="function wait(ms) {\n // TODO: return ...\n}\nwait(1000).then(() => console.log('1s passed'));",
+                solution_code="function wait(ms) {\n return new Promise(resolve => setTimeout(resolve, ms));\n}\nwait(1000).then(() => console.log('1s passed'));"
+            ),
+        ]
+
+        # Add initial blocks to the session
         session.add_all(initial_blocks)
         await session.commit()

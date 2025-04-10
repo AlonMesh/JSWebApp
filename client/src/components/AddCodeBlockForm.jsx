@@ -1,62 +1,85 @@
 import React, { useState } from 'react';
+import '../css/AddCodeBlockForm.css';
+import { createCodeBlock } from '../api/api';
 
+/**
+ * Component for adding a new code block.
+ * @param {function} onAdd - Callback function to handle the addition of a new code block.
+*/
 const AddCodeBlockForm = ({ onAdd }) => {
   const [title, setTitle] = useState('');
   const [initialCode, setInitialCode] = useState('');
   const [solutionCode, setSolutionCode] = useState('');
+  const [successMessage, setSuccessMessage] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch('http://localhost:8000/code-blocks', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    try { 
+      // Send a POST request to add a new code block
+      const newBlock = await createCodeBlock({
         title,
         initial_code: initialCode,
-        solution_code: solutionCode,
-      }),
-    });
+        solution_code: solutionCode,  
+      });
 
-    if (response.ok) {
-      const newBlock = await response.json();
-      onAdd(newBlock);
-      setTitle('');
-      setInitialCode('');
-      setSolutionCode('');
-    } else {
-      alert('Failed to add code block');
+      // Add the new block and reset the form
+        onAdd(newBlock);
+        setTitle('');
+        setInitialCode('');
+        setSolutionCode('');
+        setSuccessMessage(true);
+
+        // Automatically hide the success message after 5 seconds
+        setTimeout(() => {
+          setSuccessMessage(false);
+        }, 5000);
+      } 
+    catch (error) {
+      console.error("Error adding code block:", error);
+      alert("An error occurred while adding the code block. Please try again.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
+    <form className="add-code-block-form" onSubmit={handleSubmit}>
       <h3>Add a New Code Block</h3>
+
       <input
         type="text"
-        placeholder="Title"
+        className="title-input"
+        placeholder="Enter block title..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        style={{ display: 'block', marginBottom: '0.5rem', width: '100%' }}
       />
-      <textarea
-        placeholder="Initial code"
-        value={initialCode}
-        onChange={(e) => setInitialCode(e.target.value)}
-        required
-        rows={4}
-        style={{ display: 'block', marginBottom: '0.5rem', width: '100%' }}
-      />
-      <textarea
-        placeholder="Solution code"
-        value={solutionCode}
-        onChange={(e) => setSolutionCode(e.target.value)}
-        required
-        rows={4}
-        style={{ display: 'block', marginBottom: '0.5rem', width: '100%' }}
-      />
-      <button type="submit">Add Block</button>
+
+      <div className="code-fields">
+        <textarea
+          className="code-input"
+          placeholder="Initial code"
+          value={initialCode}
+          onChange={(e) => setInitialCode(e.target.value)}
+          required
+          rows={6}
+        />
+        <textarea
+          className="code-input"
+          placeholder="Solution code"
+          value={solutionCode}
+          onChange={(e) => setSolutionCode(e.target.value)}
+          required
+          rows={6}
+        />
+      </div>
+
+      <button className="submit-button" type="submit">
+        Add Block
+      </button>
+
+      {successMessage && (
+        <div className="success-message">Code block added successfully!</div>
+      )}
     </form>
   );
 };

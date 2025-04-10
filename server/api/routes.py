@@ -1,3 +1,4 @@
+"""HTTP API Routes for managing code blocks (GET, POST)"""
 from fastapi import APIRouter
 from server.database.crud import get_all_code_blocks, create_code_block, get_code_block_by_id
 from pydantic import BaseModel
@@ -13,13 +14,14 @@ class CodeBlockCreate(BaseModel):
 
 @router.get("/code-blocks")
 async def get_code_blocks():
-    print("Fetching all code blocks...")
-    """Fetch all block codes (concretly - id and title) from the database"""
+    """Fetch all block codes (id and title) from the database"""
     blocks = await get_all_code_blocks()
     return blocks
 
 @router.post("/code-blocks")
 async def add_code_block(block_data: CodeBlockCreate):
+    """Create a new code block and add it to the database"""
+    
     # Create a new code block in the database
     new_block = await create_code_block(block_data)
     
@@ -37,6 +39,8 @@ async def add_code_block(block_data: CodeBlockCreate):
 async def get_code_block(block_id: str):
     """Fetch a specific code block by its ID"""
     block = await get_code_block_by_id(block_id)
+    
     if not block:
         return {"error": "Code block not found"}
+    
     return block

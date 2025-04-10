@@ -1,3 +1,13 @@
+# Python
+__pycache__/
+*/__pycache__/*
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.env.*
+
 # Node.js dependencies
 node_modules/
 npm-debug.log*
@@ -9,7 +19,7 @@ logs/
 *.log
 *.log.*
 
-# Build files
+# React build
 dist/
 build/
 
@@ -36,6 +46,8 @@ Thumbs.db
 
 # Coverage files
 coverage/
+*.cover
+*.coverage
 
 # Git files
 *.lock
@@ -44,3 +56,11 @@ coverage/
 *.rej
 *.swo
 *.swp
+
+# DB files
+*.sqlite3
+*.db
+*.db-journal
+*.sql
+*.db-shm
+*.db-wal

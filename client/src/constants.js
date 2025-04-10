@@ -7,6 +7,8 @@ export const MESSAGE_TYPES = {
     REDIRECT: 'redirect',
     CODE_UPDATE: 'code_update',
     SOLVED: 'solved',
+    CODE_RESET: 'code_reset',
+    CODE_RESET_RESPONSE: 'code_reset_response',
 };
   
 // Roles for users in the application
